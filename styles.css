@@ -1,4 +1,5 @@
 :root {
+  --app-height: 100dvh;
   color-scheme: light;
   font-family: Inter, ui-rounded, "SF Pro Display", "SF Pro Text", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: #eaf0f6;
@@ -13,6 +14,7 @@
 
 html,
 body {
+  height: 100%;
   min-height: 100%;
 }
 
@@ -20,7 +22,8 @@ body {
   margin: 0;
   display: grid;
   place-items: center;
-  padding: max(18px, env(safe-area-inset-top)) 14px max(18px, env(safe-area-inset-bottom));
+  min-height: 100svh;
+  padding: max(14px, env(safe-area-inset-top)) 12px max(14px, env(safe-area-inset-bottom));
   background:
     linear-gradient(155deg, rgba(118, 154, 195, 0.2), transparent 36%),
     linear-gradient(25deg, rgba(72, 134, 116, 0.18), transparent 36%),
@@ -40,11 +43,13 @@ button {
 
 .app-shell {
   width: min(100%, 430px);
-  min-height: min(860px, calc(100vh - 28px));
+  height: min(860px, calc(var(--app-height) - 28px));
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 18px;
   padding: 22px;
+  overflow: hidden;
   border: 1px solid rgba(23, 32, 42, 0.08);
   border-radius: 34px;
   background: rgba(249, 251, 253, 0.92);
@@ -53,6 +58,7 @@ button {
 
 .topbar {
   display: flex;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: space-between;
   gap: 18px;
@@ -129,6 +135,7 @@ h2 {
 
 .tabs {
   display: flex;
+  flex: 0 0 auto;
   gap: 4px;
   overflow-x: auto;
   padding: 4px;
@@ -180,8 +187,18 @@ h2 {
 .view {
   display: none;
   flex-direction: column;
+  flex: 1 1 auto;
   gap: 16px;
   min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.view::-webkit-scrollbar {
+  display: none;
 }
 
 .view.is-active {
@@ -324,16 +341,127 @@ input:focus {
   }
 }
 
+@media (max-height: 740px) {
+  body {
+    padding: max(10px, env(safe-area-inset-top)) 8px max(10px, env(safe-area-inset-bottom));
+  }
+
+  .app-shell {
+    gap: 12px;
+    height: min(760px, calc(var(--app-height) - 20px));
+    padding: 16px;
+    border-radius: 26px;
+  }
+
+  .topbar {
+    gap: 12px;
+    padding-top: 0;
+  }
+
+  .eyebrow {
+    margin-bottom: 3px;
+    font-size: 0.7rem;
+  }
+
+  h1 {
+    font-size: clamp(1.7rem, 9vw, 2.35rem);
+  }
+
+  h2 {
+    font-size: 0.94rem;
+  }
+
+  .clock-mark {
+    width: 48px;
+    flex-basis: 48px;
+    border-width: 5px;
+    box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.78);
+  }
+
+  .clock-mark::before {
+    height: 15px;
+  }
+
+  .clock-mark::after {
+    height: 12px;
+  }
+
+  .tab,
+  .segment {
+    min-height: 40px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+  }
+
+  .tab {
+    min-width: 82px;
+  }
+
+  .view {
+    gap: 12px;
+  }
+
+  .form-stack,
+  .form-grid,
+  .duration-list {
+    gap: 10px;
+  }
+
+  .field {
+    gap: 6px;
+  }
+
+  .field span:first-child {
+    font-size: 0.78rem;
+  }
+
+  input {
+    min-height: 50px;
+    border-radius: 14px;
+    font-size: 1.05rem;
+  }
+
+  .result-panel {
+    min-height: 116px;
+    padding: 17px;
+    border-radius: 20px;
+  }
+
+  .result-label {
+    font-size: 0.72rem;
+  }
+
+  .result-panel strong {
+    font-size: clamp(1.75rem, 10.5vw, 3.1rem);
+  }
+}
+
 @media (display-mode: standalone) {
+  html,
+  body {
+    overflow: hidden;
+  }
+
   body {
     background: #f6f8fb;
+    min-height: var(--app-height);
+    padding: 0;
   }
 
   .app-shell {
     width: 100%;
-    min-height: 100vh;
+    height: var(--app-height);
+    max-height: var(--app-height);
     border: 0;
     border-radius: 0;
     box-shadow: none;
+    padding: max(14px, env(safe-area-inset-top)) 14px max(14px, env(safe-area-inset-bottom));
+  }
+
+  @media (max-height: 740px) {
+    .app-shell {
+      gap: 12px;
+      padding: max(10px, env(safe-area-inset-top)) 12px max(10px, env(safe-area-inset-bottom));
+    }
   }
 }

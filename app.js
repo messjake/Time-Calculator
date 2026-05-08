@@ -1,3 +1,13 @@
+function setAppHeight() {
+  const height = window.visualViewport?.height ?? window.innerHeight;
+  document.documentElement.style.setProperty("--app-height", `${Math.round(height)}px`);
+}
+
+setAppHeight();
+window.addEventListener("resize", setAppHeight);
+window.addEventListener("orientationchange", () => requestAnimationFrame(setAppHeight));
+window.visualViewport?.addEventListener("resize", setAppHeight);
+
 const tabs = document.querySelectorAll(".tab");
 const views = {
   convert: document.querySelector("#convert-view"),
@@ -321,6 +331,7 @@ tabs.forEach((tab) => {
     Object.entries(views).forEach(([name, view]) => {
       view.classList.toggle("is-active", name === state.activeTab);
     });
+    tab.scrollIntoView({ block: "nearest", inline: "center" });
   });
 });
 
